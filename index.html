@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FORGE - Fine-grained Multimodal Evaluation for Manufacturing Scenarios</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+
+<!-- ===== Navbar ===== -->
+<nav class="navbar">
+  <div class="container">
+    <a class="nav-brand" href="#">FORGE</a>
+    <ul class="nav-links">
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#pipeline">Pipeline</a></li>
+      <li><a href="#tasks">Tasks</a></li>
+      <li><a href="#results">Results</a></li>
+      <li><a href="#examples">Examples</a></li>
+      <li><a href="#findings">Findings</a></li>
+      <li><a href="#citation">Citation</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ===== Hero ===== -->
+<section class="hero">
+  <!-- <span class="hero-badge">ECCV 2026</span> -->
+  <h1><span>FORGE</span>: <span>F</span>ine-grained Multim<span>o</span>dal<br>Evaluation for Manufactu<span>r</span>in<span>g</span> Sc<span>e</span>narios</h1>
+  <p class="hero-subtitle">
+    A comprehensive benchmark combining 2D images and 3D point clouds with fine-grained domain semantics
+    to evaluate 18 state-of-the-art MLLMs on real-world manufacturing quality inspection tasks.
+  </p>
+  <p class="hero-authors">
+    <a href="https://edward-jianqaq.github.io/" target="_blank" style="color:inherit;text-decoration:none;">Xiangru Jian</a><sup>1,*</sup> &nbsp;
+    Hao Xu<sup>2,*,&dagger;</sup> &nbsp;
+    Wei Pang<sup>4,*</sup> &nbsp;
+    Xinjian Zhao<sup>4</sup> &nbsp;
+    Chengyu Tao<sup>5</sup> &nbsp;
+    Qixin Zhang<sup>6</sup> &nbsp;
+    Xikun Zhang<sup>7,&dagger;</sup> &nbsp;
+    Chao Zhang<sup>1</sup><br>
+    Guanzhi Deng<sup>8</sup> &nbsp;
+    Alex Xue<sup>1</sup> &nbsp;
+    Juan Du<sup>9</sup> &nbsp;
+    Tianshu Yu<sup>4</sup> &nbsp;
+    Garth Tarr<sup>2</sup> &nbsp;
+    Qiuzhuang Sun<sup>3</sup> &nbsp;
+    Dacheng Tao<sup>6</sup>
+  </p>
+  <p class="hero-affiliations">
+    <sup>1</sup>University of Waterloo, Canada &nbsp;
+    <sup>2</sup>University of Sydney, Australia &nbsp;
+    <sup>3</sup>SMU, Singapore &nbsp;
+    <sup>4</sup>CUHK, Shenzhen, China<br>
+    <sup>5</sup>Hunan University, China &nbsp;
+    <sup>6</sup>NTU, Singapore &nbsp;
+    <sup>7</sup>RMIT University, Australia &nbsp;
+    <sup>8</sup>City University of Hong Kong, China &nbsp;
+    <sup>9</sup>HKUST (Guangzhou), China<br>
+    <sup>*</sup>Equal contribution &nbsp; <sup>&dagger;</sup>Corresponding author
+  </p>
+  <div class="hero-buttons">
+    <a href="#" class="btn btn-primary"><i class="ai ai-arxiv"></i> Paper</a>
+    <a href="#" class="btn btn-outline"><i class="fab fa-github"></i> Code</a>
+    <a href="#" class="btn btn-accent"><i class="fas fa-database"></i> Dataset</a>
+    <a href="#" class="btn btn-outline"><i class="fas fa-trophy"></i> Leaderboard</a>
+  </div>
+
+  <div class="container">
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-number">18</div>
+        <div class="stat-label">MLLMs Evaluated</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">3</div>
+        <div class="stat-label">Manufacturing Tasks</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">~3K</div>
+        <div class="stat-label">2D Images</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">14</div>
+        <div class="stat-label">Workpiece Categories</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">90</div>
+        <div class="stat-label">Distinct Models</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">2</div>
+        <div class="stat-label">Modalities (2D+3D)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Overview ===== -->
+<section id="overview" class="section section-alt">
+  <div class="container">
+    <h2 class="section-title">Overview</h2>
+    <p class="section-desc">
+      Existing VLM benchmarks test coarse-grained perception ("What is this?").
+      FORGE demands <strong>fine-grained, model-number-level</strong> understanding
+      for real manufacturing quality control.
+    </p>
+
+    <div class="two-col">
+      <div>
+        <div class="figure-container" style="box-shadow:none;padding:0;">
+          <img src="static/images/intro.png" alt="FORGE vs Previous Benchmarks">
+        </div>
+      </div>
+      <div>
+        <h3 style="color:var(--primary);margin-bottom:1rem;">Why FORGE?</h3>
+        <p style="margin-bottom:1rem;">
+          Previous benchmarks ask "Is this a screw?" FORGE asks "Is this an <strong>M8</strong> screw,
+          and does it match the <strong>M10</strong> specification required for this assembly?"
+        </p>
+        <p style="margin-bottom:1rem;">
+          We provide the first comprehensive evaluation combining <strong>2D images</strong> and
+          <strong>3D point clouds</strong> with domain-specific manufacturing knowledge,
+          covering 14 workpiece categories and 90 distinct model specifications.
+        </p>
+        <p>
+          Our evaluation of 18 frontier and open-source MLLMs reveals that
+          <strong>visual grounding is not the bottleneck</strong> &mdash; instead,
+          <strong>insufficient domain-specific knowledge</strong> is the primary limitation.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Pipeline ===== -->
+<section id="pipeline" class="section">
+  <div class="container">
+    <h2 class="section-title">FORGE Pipeline</h2>
+    <p class="section-desc">
+      From physical workpieces to standardized evaluation: FORGE bridges the gap between
+      industrial reality and MLLM reasoning.
+    </p>
+    <div class="figure-container">
+      <img src="static/images/pipeline.png" alt="FORGE Pipeline" style="max-width:100%;">
+      <p class="figure-caption">
+        <strong>Figure 1.</strong> The FORGE pipeline: (1) Raw manufacturing data from the physical world,
+        (2) Standardization with fine-grained domain knowledge injection,
+        (3) Task-oriented scenarios with both 3D point clouds and 2D rendered views,
+        (4) MLLM cognition evaluation revealing macro-perception vs. micro-reasoning gaps.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Tasks ===== -->
+<section id="tasks" class="section section-alt">
+  <div class="container">
+    <h2 class="section-title">Manufacturing Tasks</h2>
+    <p class="section-desc">
+      Three core quality inspection tasks spanning workpiece verification, surface defect inspection,
+      and assembly verification.
+    </p>
+
+    <div class="task-grid">
+      <div class="task-card t1">
+        <h3><i class="fas fa-search"></i> &nbsp;Task 1: WorkVeri</h3>
+        <p><strong>Workpiece Verification</strong> &mdash; Given an assembly, identify which part has the wrong model number. Requires fine-grained discrimination between similar-looking parts (e.g., M8 vs M10 bolts).</p>
+        <p style="margin-top:0.5rem;font-size:0.82rem;color:var(--accent);">451 image + 496 three-view cases</p>
+      </div>
+      <div class="task-card t2">
+        <h3><i class="fas fa-microscope"></i> &nbsp;Task 2: SurfInsp</h3>
+        <p><strong>Surface Inspection</strong> &mdash; Classify manufacturing defects: crack, cut, deformation, or dent. Two-part answer: first determine if normal, then identify defect type.</p>
+        <p style="margin-top:0.5rem;font-size:0.82rem;color:var(--accent);">830 three-view cases, 4 defect types</p>
+      </div>
+      <div class="task-card t3">
+        <h3><i class="fas fa-puzzle-piece"></i> &nbsp;Task 3: AssyVeri</h3>
+        <p><strong>Assembly Verification</strong> &mdash; Identify extra, mismatched, or missing parts in an assembly. Tests compositional understanding of multi-component systems.</p>
+        <p style="margin-top:0.5rem;font-size:0.82rem;color:var(--accent);">857 image + 309 three-view + 377 missing-part cases</p>
+      </div>
+    </div>
+
+    <div class="figure-container">
+      <img src="static/images/example.png" alt="Task Examples" style="max-width:100%;">
+      <p class="figure-caption">
+        <strong>Figure 2.</strong> Examples for each task showing inputs (2D images / 3D three-view renders),
+        dialogue format, and expected outputs.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Results ===== -->
+<section id="results" class="section">
+  <div class="container">
+    <h2 class="section-title">Evaluation Results</h2>
+    <p class="section-desc">
+      Comprehensive evaluation of 18 MLLMs across all tasks with zero-shot (Z), reference (R), and in-context learning (F) settings.
+    </p>
+
+    <!-- Radar chart -->
+    <div class="figure-container">
+      <img src="static/images/radar.png" alt="Model Performance Radar" style="max-width:100%;">
+      <p class="figure-caption">
+        <strong>Figure 3.</strong> Radar chart comparing open-source and closed-source model performance across all tasks and modalities.
+      </p>
+    </div>
+
+    <!-- Tab navigation -->
+    <div class="tab-nav">
+      <button class="tab-btn active" onclick="showTab('tab-t1')">Task 1: WorkVeri</button>
+      <button class="tab-btn" onclick="showTab('tab-t2')">Task 2: SurfInsp</button>
+      <button class="tab-btn" onclick="showTab('tab-t3')">Task 3: AssyVeri</button>
+      <button class="tab-btn" onclick="showTab('tab-grounding')">Grounding Ablation</button>
+    </div>
+
+    <!-- Task 1 Table -->
+    <div id="tab-t1" class="tab-content active">
+      <h3 style="margin-bottom:0.8rem;color:var(--primary);">Task 1: Workpiece Verification (Accuracy %)</h3>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Model</th>
+              <th colspan="3">Image</th>
+              <th colspan="3">Three-View</th>
+            </tr>
+            <tr>
+              <th></th><th>Z</th><th>R</th><th>F</th><th>Z</th><th>R</th><th>F</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="cat-header"><td colspan="7">Closed-Source Models</td></tr>
+            <tr><td>GPT-5</td><td>74.7</td><td>64.2</td><td class="best">85.2</td><td>60.7</td><td>29.8</td><td>56.5</td></tr>
+            <tr><td>GPT-5.2</td><td>70.9</td><td>51.9</td><td>79.2</td><td>61.3</td><td>28.2</td><td>61.7</td></tr>
+            <tr><td>GPT-5 Mini</td><td>73.6</td><td>72.7</td><td>76.8</td><td>37.9</td><td>33.9</td><td>30.6</td></tr>
+            <tr><td>O3</td><td>75.2</td><td>64.1</td><td>76.3</td><td>57.9</td><td>28.8</td><td>56.9</td></tr>
+            <tr><td>Gemini-3-Flash</td><td>72.2</td><td class="best">76.3</td><td>82.3</td><td class="best">69.6</td><td class="best">65.1</td><td class="best">67.3</td></tr>
+            <tr><td>Gemini-2.5-Flash</td><td>55.8</td><td>51.7</td><td>54.5</td><td>56.0</td><td>43.5</td><td>53.6</td></tr>
+            <tr><td>Claude-Opus-4.5</td><td>59.4</td><td>56.1</td><td>61.0</td><td>39.1</td><td>27.8</td><td>55.0</td></tr>
+            <tr><td>Seed-1.6</td><td>67.0</td><td>49.7</td><td>70.3</td><td>54.4</td><td>26.8</td><td>46.2</td></tr>
+            <tr><td>Kimi-K2.5</td><td>60.1</td><td>56.7</td><td>62.7</td><td>19.4</td><td>10.1</td><td>44.0</td></tr>
+            <tr class="cat-header"><td colspan="7">Open-Source Models</td></tr>
+            <tr><td>Qwen3-VL-235B</td><td>64.1</td><td>57.6</td><td>66.3</td><td>51.4</td><td>32.9</td><td>34.3</td></tr>
+            <tr><td>Qwen3-VL-8B</td><td>35.3</td><td>23.9</td><td>25.1</td><td>41.3</td><td>26.8</td><td>26.2</td></tr>
+            <tr><td>InternVL3-78B</td><td>32.6</td><td>53.9</td><td>65.3</td><td>32.3</td><td>24.8</td><td>30.0</td></tr>
+            <tr><td>Llama-4-MAV</td><td>37.3</td><td>39.0</td><td>48.8</td><td>36.3</td><td>20.4</td><td>35.7</td></tr>
+            <tr><td>GLM-4.6V</td><td>25.3</td><td>50.3</td><td>49.8</td><td>46.4</td><td>43.8</td><td>44.4</td></tr>
+            <tr><td>Gemma-3-27B</td><td>25.9</td><td>30.4</td><td>34.6</td><td>27.6</td><td>23.6</td><td>28.8</td></tr>
+            <tr><td>Mistral-3-Large</td><td>25.7</td><td>25.4</td><td>31.0</td><td>33.9</td><td>20.8</td><td>37.3</td></tr>
+            <tr><td>Mistral-3-14B</td><td>32.5</td><td>20.2</td><td>24.2</td><td>32.5</td><td>25.0</td><td>28.4</td></tr>
+            <tr><td>Mistral-3-8B</td><td>29.9</td><td>24.2</td><td>32.0</td><td>30.8</td><td>18.1</td><td>28.6</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Task 2 Table -->
+    <div id="tab-t2" class="tab-content">
+      <h3 style="margin-bottom:0.8rem;color:var(--primary);">Task 2: Surface Inspection (Accuracy %)</h3>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr><th>Model</th><th>Zero-Shot</th><th>Reference</th><th>Few-Shot</th></tr>
+          </thead>
+          <tbody>
+            <tr class="cat-header"><td colspan="4">Closed-Source Models</td></tr>
+            <tr><td>Gemini-3-Flash</td><td>18.5</td><td>29.6</td><td class="best">47.1</td></tr>
+            <tr><td>Claude-Opus-4.5</td><td>8.7</td><td>7.7</td><td>44.3</td></tr>
+            <tr><td>Seed-1.6</td><td>22.6</td><td>36.2</td><td>42.3</td></tr>
+            <tr><td>O3</td><td>21.1</td><td class="best">36.2</td><td>40.0</td></tr>
+            <tr><td>Llama-4-MAV</td><td>27.0</td><td>24.1</td><td>39.1</td></tr>
+            <tr><td>GPT-5</td><td>22.0</td><td>35.7</td><td>38.3</td></tr>
+            <tr><td>Gemini-2.5-Flash</td><td>17.2</td><td>26.4</td><td>38.1</td></tr>
+            <tr><td>GPT-5 Mini</td><td>17.0</td><td>33.4</td><td>36.2</td></tr>
+            <tr><td>GPT-5.2</td><td>16.6</td><td>21.9</td><td>31.7</td></tr>
+            <tr><td>Kimi-K2.5</td><td>13.2</td><td>16.8</td><td>30.1</td></tr>
+            <tr class="cat-header"><td colspan="4">Open-Source Models</td></tr>
+            <tr><td>Mistral-3-8B</td><td>24.3</td><td>27.1</td><td>38.9</td></tr>
+            <tr><td>Gemma-3-27B</td><td>21.7</td><td>23.9</td><td>33.2</td></tr>
+            <tr><td>Mistral-3-14B</td><td class="best">28.3</td><td>27.7</td><td>33.2</td></tr>
+            <tr><td>Qwen3-VL-235B</td><td>19.2</td><td>18.7</td><td>32.2</td></tr>
+            <tr><td>GLM-4.6V</td><td>23.5</td><td>23.8</td><td>38.4</td></tr>
+            <tr><td>Mistral-3-Large</td><td>19.8</td><td>19.8</td><td>26.7</td></tr>
+            <tr><td>InternVL3-78B</td><td>19.2</td><td>21.6</td><td>25.7</td></tr>
+            <tr><td>Qwen3-VL-8B</td><td>19.4</td><td>21.3</td><td>25.8</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Task 3 Table -->
+    <div id="tab-t3" class="tab-content">
+      <h3 style="margin-bottom:0.8rem;color:var(--primary);">Task 3: Assembly Verification (Accuracy %)</h3>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Model</th>
+              <th colspan="3">Image</th>
+              <th colspan="3">Three-View</th>
+            </tr>
+            <tr><th></th><th>Z</th><th>R</th><th>F</th><th>Z</th><th>R</th><th>F</th></tr>
+          </thead>
+          <tbody>
+            <tr class="cat-header"><td colspan="7">Closed-Source Models</td></tr>
+            <tr><td>Gemini-3-Flash</td><td class="best">58.1</td><td class="best">70.4</td><td class="best">71.4</td><td>47.2</td><td>46.3</td><td>47.6</td></tr>
+            <tr><td>GPT-5.2</td><td>43.2</td><td>53.5</td><td>63.2</td><td class="best">54.0</td><td class="best">57.0</td><td class="best">53.7</td></tr>
+            <tr><td>Claude-Opus-4.5</td><td>52.1</td><td>56.4</td><td>62.9</td><td>42.1</td><td>50.8</td><td>45.3</td></tr>
+            <tr><td>O3</td><td>48.2</td><td>59.8</td><td>61.0</td><td>49.8</td><td>34.0</td><td>51.8</td></tr>
+            <tr><td>GPT-5</td><td>50.1</td><td>49.8</td><td>60.5</td><td>53.7</td><td>30.7</td><td>51.8</td></tr>
+            <tr><td>GPT-5 Mini</td><td>43.6</td><td>51.1</td><td>52.2</td><td>49.5</td><td>29.4</td><td>45.3</td></tr>
+            <tr><td>Seed-1.6</td><td>39.7</td><td>42.5</td><td>47.9</td><td>41.4</td><td>26.5</td><td>34.3</td></tr>
+            <tr><td>Gemini-2.5-Flash</td><td>39.6</td><td>32.2</td><td>46.7</td><td>45.0</td><td>40.1</td><td>44.0</td></tr>
+            <tr><td>Kimi-K2.5</td><td>18.8</td><td>11.7</td><td>25.8</td><td>11.7</td><td>6.5</td><td>22.0</td></tr>
+            <tr class="cat-header"><td colspan="7">Open-Source Models</td></tr>
+            <tr><td>Qwen3-VL-235B</td><td>36.9</td><td>40.2</td><td>50.2</td><td>41.1</td><td>28.8</td><td>39.5</td></tr>
+            <tr><td>GLM-4.6V</td><td>27.9</td><td>37.2</td><td>45.3</td><td>38.8</td><td>36.6</td><td>37.9</td></tr>
+            <tr><td>InternVL3-78B</td><td>33.1</td><td>36.1</td><td>42.4</td><td>34.3</td><td>22.0</td><td>28.8</td></tr>
+            <tr><td>Llama-4-MAV</td><td>32.1</td><td>25.8</td><td>36.3</td><td>38.2</td><td>30.1</td><td>37.5</td></tr>
+            <tr><td>Qwen3-VL-8B</td><td>31.9</td><td>28.4</td><td>30.3</td><td>39.2</td><td>33.0</td><td>38.8</td></tr>
+            <tr><td>Gemma-3-27B</td><td>28.3</td><td>31.7</td><td>32.9</td><td>27.2</td><td>32.0</td><td>32.0</td></tr>
+            <tr><td>Mistral-3-8B</td><td>29.6</td><td>26.8</td><td>30.3</td><td>24.6</td><td>18.4</td><td>29.4</td></tr>
+            <tr><td>Mistral-3-14B</td><td>29.7</td><td>32.0</td><td>28.8</td><td>28.2</td><td>19.1</td><td>25.9</td></tr>
+            <tr><td>Mistral-3-Large</td><td>29.1</td><td>23.7</td><td>28.5</td><td>26.2</td><td>26.9</td><td>25.9</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Grounding Ablation Table -->
+    <div id="tab-grounding" class="tab-content">
+      <h3 style="margin-bottom:0.8rem;color:var(--primary);">Grounding Ablation (Accuracy %)</h3>
+      <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:1rem;">
+        Testing spatial grounding ability independently from domain knowledge.
+        High grounding accuracy confirms <strong>visual perception is NOT the bottleneck</strong>.
+      </p>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Model</th>
+              <th colspan="2">Single-Image</th>
+              <th colspan="2">Cross-Image</th>
+              <th>Avg</th>
+            </tr>
+            <tr><th></th><th>C&rarr;L</th><th>L&rarr;C</th><th>L&rarr;L</th><th>C&rarr;C</th><th></th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Gemini-3-Flash</td><td class="best">98.2</td><td class="best">99.6</td><td class="best">88.7</td><td class="best">79.9</td><td class="best">91.6</td></tr>
+            <tr><td>Qwen3-VL-235B</td><td>85.4</td><td>98.8</td><td>80.3</td><td>65.7</td><td>82.6</td></tr>
+            <tr><td>GPT-5.2</td><td>74.6</td><td>97.6</td><td>85.6</td><td>75.4</td><td>83.3</td></tr>
+            <tr><td>Seed-1.6</td><td>42.0</td><td>99.2</td><td>79.3</td><td>71.2</td><td>72.9</td></tr>
+            <tr><td>Mistral-3-8B</td><td>66.0</td><td>70.6</td><td>62.0</td><td>33.9</td><td>58.1</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="figure-container" style="margin-top:2rem;">
+        <img src="static/images/model_comparison.png" alt="Model Comparison" style="max-width:100%;">
+        <p class="figure-caption">
+          <strong>Figure 4.</strong> Model-number-level tasks (darker bars) are significantly harder than
+          coarse workpiece-level tasks (lighter bars), revealing the domain knowledge gap.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Data Examples ===== -->
+<section id="examples" class="section section-alt">
+  <div class="container">
+    <h2 class="section-title">Data Examples</h2>
+    <p class="section-desc">
+      Sample images from each task showing the diversity of industrial components, defect types, and evaluation modalities.
+    </p>
+
+    <div class="gallery">
+      <div class="gallery-item">
+        <img src="static/images/examples/task1_img_0.jpg" alt="Task 1 Image">
+        <div class="caption"><strong>Task 1 Image</strong> &mdash; Assembly with one part having wrong model number</div>
+      </div>
+      <div class="gallery-item">
+        <img src="static/images/examples/task1_grounding_0.jpg" alt="Task 1 Grounding">
+        <div class="caption"><strong>Task 1 Grounding</strong> &mdash; MCQ dots marking candidate parts for selection</div>
+      </div>
+      <div class="gallery-item">
+        <img src="static/images/examples/task1_3v_0.png" alt="Task 1 Three-View">
+        <div class="caption"><strong>Task 1 Three-View</strong> &mdash; Rendered front/side/top views with labeled parts</div>
+      </div>
+      <div class="gallery-item">
+        <img src="static/images/examples/task2_3v_0.png" alt="Task 2 Three-View">
+        <div class="caption"><strong>Task 2: Cut defect</strong> &mdash; Surface scratch on a corner bracket</div>
+      </div>
+      <div class="gallery-item">
+        <img src="static/images/examples/task2_3v_10.png" alt="Task 2 Three-View 2">
+        <div class="caption"><strong>Task 2: Another defect</strong> &mdash; Defect classification from three-view render</div>
+      </div>
+      <div class="gallery-item">
+        <img src="static/images/examples/task3_img_0.jpg" alt="Task 3 Image">
+        <div class="caption"><strong>Task 3 Image</strong> &mdash; Assembly with an extra/wrong component</div>
+      </div>
+      <div class="gallery-item">
+        <img src="static/images/examples/task3_grounding_0.jpg" alt="Task 3 Grounding">
+        <div class="caption"><strong>Task 3 Grounding</strong> &mdash; MCQ dots identifying candidate anomalous parts</div>
+      </div>
+      <div class="gallery-item">
+        <img src="static/images/examples/task3_3v_0.png" alt="Task 3 Three-View">
+        <div class="caption"><strong>Task 3 Three-View</strong> &mdash; Assembly with labeled parts, one is extra</div>
+      </div>
+      <div class="gallery-item">
+        <img src="static/images/examples/task1_img_10.jpg" alt="Task 1 Image 2">
+        <div class="caption"><strong>Task 1 Image</strong> &mdash; Different assembly scenario with mixed models</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Error Cases ===== -->
+<section id="errors" class="section">
+  <div class="container">
+    <h2 class="section-title">Error Analysis</h2>
+    <p class="section-desc">
+      Analyzing where and why MLLMs fail on manufacturing tasks.
+    </p>
+
+    <div class="figure-container">
+      <img src="static/images/error_analysis.png" alt="Error Analysis" style="max-width:100%;">
+      <p class="figure-caption">
+        <strong>Figure 5.</strong> Representative error cases from Gemini-2.5-Flash. Left: the model incorrectly
+        identifies a flat washer material mismatch (predicting E instead of A). Right: the model provides
+        extensive reasoning about worn parts but selects the wrong component (predicting B instead of D).
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Key Findings ===== -->
+<section id="findings" class="section section-alt">
+  <div class="container">
+    <h2 class="section-title">Key Findings</h2>
+    <p class="section-desc">
+      Insights from evaluating 18 state-of-the-art MLLMs on manufacturing quality inspection.
+    </p>
+
+    <div class="findings-grid">
+      <div class="finding-card">
+        <div class="finding-icon">&#128270;</div>
+        <div>
+          <h4>Visual Grounding is Not the Bottleneck</h4>
+          <p>Frontier models achieve 86&ndash;98% accuracy on spatial grounding ablations, confirming
+          they can locate and match parts across images. The limitation lies elsewhere.</p>
+        </div>
+      </div>
+      <div class="finding-card">
+        <div class="finding-icon">&#128218;</div>
+        <div>
+          <h4>Domain Knowledge is the Primary Gap</h4>
+          <p>MLLMs lack fine-grained manufacturing knowledge (model numbers, specifications).
+          Model-number tasks are 2&ndash;3x harder than coarse workpiece identification.</p>
+        </div>
+      </div>
+      <div class="finding-card">
+        <div class="finding-icon">&#128200;</div>
+        <div>
+          <h4>ICL Consistently Helps</h4>
+          <p>In-context learning with labeled examples improves performance across nearly all models,
+          with gains of 10&ndash;20% on average. Best result: GPT-5 reaches 85.2% on Task 1 with ICL.</p>
+        </div>
+      </div>
+      <div class="finding-card">
+        <div class="finding-icon">&#9888;&#65039;</div>
+        <div>
+          <h4>References Can Hurt</h4>
+          <p>Counter-intuitively, normal reference images sometimes <em>degrade</em> performance on
+          three-view tasks, suggesting models struggle with multi-image comparative reasoning.</p>
+        </div>
+      </div>
+      <div class="finding-card">
+        <div class="finding-icon">&#128736;</div>
+        <div>
+          <h4>SFT Shows 90.8% Relative Gain</h4>
+          <p>A 3B-parameter model fine-tuned on domain data matches a 235B model,
+          demonstrating that domain-specific training dramatically closes the gap.</p>
+        </div>
+      </div>
+      <div class="finding-card">
+        <div class="finding-icon">&#128225;</div>
+        <div>
+          <h4>Task 2 is the Hardest</h4>
+          <p>Surface defect classification peaks at only 47.1% accuracy (Gemini-3-Flash with ICL),
+          suggesting fine-grained defect discrimination remains an open challenge.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="figure-container" style="margin-top:2rem;">
+      <img src="static/images/sft_results.png" alt="SFT Results" style="max-width:600px;">
+      <p class="figure-caption">
+        <strong>Figure 6.</strong> Domain-specific supervised fine-tuning on a 3B model achieves +25.6% absolute
+        improvement on held-out manufacturing scenarios, matching the 235B model's performance.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Citation ===== -->
+<section id="citation" class="section">
+  <div class="container">
+    <h2 class="section-title">Citation</h2>
+    <p class="section-desc">If you find FORGE useful, please cite our paper:</p>
+    <div class="citation-box">@inproceedings{jian2026forge,
+  title={FORGE: Fine-grained Multimodal Evaluation for Manufacturing Scenarios},
+  author={Jian, Xiangru and Xu, Hao and Pang, Wei and Zhao, Xinjian and Tao, Chengyu and Zhang, Qixin and Zhang, Xikun and Zhang, Chao and Deng, Guanzhi and Xue, Alex and Du, Juan and Yu, Tianshu and Tarr, Garth and Sun, Qiuzhuang and Tao, Dacheng},
+  booktitle={Arxiv},
+  year={2026}
+}<button class="copy-btn" onclick="copyBib()"><i class="fas fa-copy"></i> Copy</button></div>
+  </div>
+</section>
+
+<!-- ===== Footer ===== -->
+<footer class="footer">
+  <p>FORGE Benchmark &copy; 2026 &nbsp;|&nbsp;
+  <a href="#" style="color:var(--primary);">Paper</a> &nbsp;|&nbsp;
+  <a href="#" style="color:var(--primary);">GitHub</a> &nbsp;|&nbsp;
+  <a href="#" style="color:var(--primary);">HuggingFace</a></p>
+</footer>
+
+<!-- ===== Scripts ===== -->
+<script>
+// Tab switching
+function showTab(tabId) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// Copy citation
+function copyBib() {
+  const bib = document.querySelector('.citation-box').innerText.replace('Copy', '').trim();
+  navigator.clipboard.writeText(bib).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+    setTimeout(() => { btn.innerHTML = '<i class="fas fa-copy"></i> Copy'; }, 2000);
+  });
+}
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
+// Active nav highlighting
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 120) current = s.getAttribute('id');
+  });
+  navLinks.forEach(l => {
+    l.classList.remove('active');
+    if (l.getAttribute('href') === '#' + current) l.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>
