@@ -96,6 +96,18 @@ body {
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+.hero-video {
+  max-width: 800px;
+  margin: 0 auto 2rem;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.15);
+}
+.hero-video video {
+  width: 100%;
+  display: block;
+  border-radius: var(--radius);
+}
 .hero-subtitle {
   font-size: 1.25rem;
   color: var(--text-muted);
