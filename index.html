@@ -403,12 +403,16 @@
         <div class="caption"><strong>Task 1 Three-View</strong> &mdash; Rendered front/side/top views with labeled parts</div>
       </div>
       <div class="gallery-item">
-        <img src="static/images/examples/task2_3v_0.png" alt="Task 2 Three-View">
-        <div class="caption"><strong>Task 2: Cut defect</strong> &mdash; Surface scratch on a corner bracket</div>
+        <img src="static/images/examples/task2_3v_cut_annotated.png" alt="Task 2: Cut">
+        <div class="caption"><strong>Task 2: Cut</strong> &mdash; Surface scratch on a corner bracket (red = GT defect region)</div>
       </div>
       <div class="gallery-item">
-        <img src="static/images/examples/task2_3v_10.png" alt="Task 2 Three-View 2">
-        <div class="caption"><strong>Task 2: Another defect</strong> &mdash; Defect classification from three-view render</div>
+        <img src="static/images/examples/task2_3v_crack_annotated.png" alt="Task 2: Crack">
+        <div class="caption"><strong>Task 2: Crack</strong> &mdash; Material fracture on a corner bracket (red = GT defect region)</div>
+      </div>
+      <div class="gallery-item">
+        <img src="static/images/examples/task2_3v_dent_annotated.png" alt="Task 2: Dent">
+        <div class="caption"><strong>Task 2: Dent</strong> &mdash; Surface depression on a corner bracket (red = GT defect region)</div>
       </div>
       <div class="gallery-item">
         <img src="static/images/examples/task3_img_0.jpg" alt="Task 3 Image">
@@ -471,15 +475,15 @@
         <div>
           <h4>Domain Knowledge is the Primary Gap</h4>
           <p>MLLMs lack fine-grained manufacturing knowledge (model numbers, specifications).
-          Model-number tasks are 2&ndash;3x harder than coarse workpiece identification.</p>
+          Model-number-level tasks are consistently harder than coarse workpiece identification.</p>
         </div>
       </div>
       <div class="finding-card">
         <div class="finding-icon">&#128200;</div>
         <div>
-          <h4>ICL Consistently Helps</h4>
-          <p>In-context learning with labeled examples improves performance across nearly all models,
-          with gains of 10&ndash;20% on average. Best result: GPT-5 reaches 85.2% on Task 1 with ICL.</p>
+          <h4>In-Context Demonstrations Consistently Help</h4>
+          <p>Providing labeled in-context demonstrations improves performance across nearly all models,
+          with gains of 10&ndash;20% on average. Best result: GPT-5 reaches 85.2% on Task 1 with ICD.</p>
         </div>
       </div>
       <div class="finding-card">
@@ -502,7 +506,7 @@
         <div class="finding-icon">&#128225;</div>
         <div>
           <h4>Task 2 is the Hardest</h4>
-          <p>Surface defect classification peaks at only 47.1% accuracy (Gemini-3-Flash with ICL),
+          <p>Surface defect classification peaks at only 47.1% accuracy (Gemini-3-Flash with ICD),
           suggesting fine-grained defect discrimination remains an open challenge.</p>
         </div>
       </div>
